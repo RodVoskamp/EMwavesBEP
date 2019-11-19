@@ -9,8 +9,8 @@ using StaticArrays
 v = SArray{Tuple{3},Float64,1,3}
 f = SArray{Tuple{4},Int,1,4}
 
-b1 = v([8,2,3])
-b2 = v([4,10,1])
+b1 = v([03,-2,7])
+b2 = v([10,6,1])
 n1 = v([0,1,0.5])
 n2 = v([1,0,0.5])
 n3 = v([0,-1,0.5])
@@ -21,7 +21,7 @@ face = zeros(f,4)
 for i = 1:length(vertice)-3
     face[i] = f([1,2,i+2,i+3])
 end
-face[4] = f([3,length(vertice),1,2])
+face[4] = f([3,1,2,length(vertice)])
 #THis edge should have shape{4,2,1}, ans this is what happens.
 
 Γ2 = Mesh(vertice,face)
@@ -51,5 +51,5 @@ for (i,k) in enumerate(cells(Γ2))
     tang2 = carttobary(ptch,0.5*(b2+b1))
     ctrd = neighborhood(ptch, tang2)
 
-    print(abs(1/l-dot(t[i].coeff*(ref(ctrd)[t[i].refid].value),BEAST.normalize(b2-b1)))<0.001)
+    print(abs(1/l-dot(t[i].coeff*(ref(ctrd)[t[i].refid].value),BEAST.normalize(b2-b1)))< 0.001)
 end

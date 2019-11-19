@@ -27,5 +27,6 @@ for (i,k) in enumerate(cells(skeleton(Γ,1)))
     b = t.fns[i][2]
     a2 = a.coeff*(ref2(ctrd)[a.refid].value)
     b2 = b.coeff*(ref2(ctrd)[b.refid].value)
-    print(a2+b2,"\n")
+    print(a2+b2)
+    print((BEAST.norm(ref(ctrd)[i][2]-a2-b2)<0.01),"\n")
 end

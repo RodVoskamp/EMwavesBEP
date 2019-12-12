@@ -46,10 +46,12 @@ t = X2.fns[shapepos]
 ref = refspace(X2)
 l = BEAST.norm(b1-b2)
 for (i,k) in enumerate(cells(Γ2))
-    print(k)
+    #print(k)
     ptch = chart(Γ2,k)
     tang2 = carttobary(ptch,0.5*(b2+b1))
     ctrd = neighborhood(ptch, tang2)
 
-    print(abs(1/l-dot(t[i].coeff*(ref(ctrd)[t[i].refid].value),BEAST.normalize(b2-b1)))< 0.001)
+    #print(abs(1/l-dot(t[i].coeff*(ref(ctrd)[t[i].refid].value),BEAST.normalize(b2-b1)))< 0.001,t[i].refid)
+    @assert abs(1/l-dot(t[i].coeff*(ref(ctrd)[t[i].refid].value),BEAST.normalize(b2-b1)))< 0.001
 end
+print("test succesvol")

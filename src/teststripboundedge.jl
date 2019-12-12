@@ -9,16 +9,18 @@ using DelimitedFiles
 pyplot()
 
 d = dirname(pathof(EMwavesBEP))
-include(joinpath(d,"stripboundedge.jl"))
+#include(joinpath(d,"stripboundedge.jl"))
 include(joinpath(d,"gmsh3d.jl"))
 
 pygui(true)
 fig = figure()
 ax = fig.gca(projection="3d")
 
-Γ = read_gmsh3d_mesh(joinpath(d,"smallfemsphere.msh"))
+Γ = read_gmsh3d_mesh(joinpath(d,"smallcube.msh"))
+Γ = CompScienceMeshes.tetmeshsphere(3,0.5)
 vert = Γ.vertices
-usededges, dummy = stripboundedge(Γ)
+usededges, dummy, dummy2 = CompScienceMeshes.stripboundedge(Γ)
+usededges = usededges.faces
 
 l = length(usededges)
 i = 0

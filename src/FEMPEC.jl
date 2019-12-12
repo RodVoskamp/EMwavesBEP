@@ -4,21 +4,34 @@ using DelimitedFiles
 using EMwavesBEP
 using CompScienceMeshes
 
-d = dirname(pathof(EMwavesBEP))
+Γ = CompScienceMeshes.tetmeshsphere(1,0.4)
+#d = dirname(pathof(EMwavesBEP))
+#include(joinpath(d,"load_gmsh.jl"))
+useedg, deledg, delfac = CompScienceMeshes.stripboundedge(Γ)
+X = BEAST.nedelecc3d(Γ,useedg)
 
-include(joinpath(d,"gmsh3d.jl"))
-include(joinpath(d,"stripboundedge.jl"))
-Γ = read_gmsh3d_mesh(joinpath(d,"smallfemsphere.msh"))
-useedg, deledg = stripboundedge(Γ)
-mesuseedg = Mesh(Γ.vertices,useedg)
-X = BEAST.nedelecc3d(Γ,mesuseedg)
-
-I = BEAST.Identity()
-assemble(I,curl(X),curl(X))
-#assemble(I,X,X)
-
-function f(r) return 0 end
+Id = BEAST.Identity()
+f(p) = -im*point(0,0,1)
+F = BEAST.SourceField(f)
 
 @hilbertspace e
 @hilbertspace e2
-@discretise I[curl(e2),curl(e)]-I[e2,e] == f[e2] e∈X e2∈X
+Eq = @varform Id[curl(e2),curl(e)]-1*Id[e2,e] == F[e2]
+eq = @discretise Eq e∈X e2∈X
+u = solve(eq)
+@assert size(useedg.faces,1) == size(u,1)
+
+import PlotlyJS
+using LinearAlgebra
+Y = curl(X)
+@assert size(Y.pos,1) == size(u,1)
+
+ttrY = BEAST.ttrace(Y,delfac)
+fcrj, _ = facecurrents(u,ttrY)
+PlotlyJS.plot(patch(skeleton(Γ,2), norm.(fcrj)))
+
+#ntrY = BEAST.ntrace(Y,delfac)
+#@assert size(ntrY.pos,1) == size(u,1)
+#fcrj, _ = facecurrents(u,ntrY)
+#@assert size(fcrj,1) == size(skeleton(Γ,2).faces,1)
+#PlotlyJS.plot(patch(skeleton(Γ,2), norm.(fcrj)))

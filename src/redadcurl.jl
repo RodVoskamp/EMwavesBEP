@@ -22,10 +22,38 @@ edm[3] = f2([1,4])
 useedg = Mesh([a,b,c,o], edm)
 X = BEAST.nedelecc3d(Γ,useedg)
 
-#X = BEAST.nedelecc3d(Γ)
 Y = curl(X)
 E, ad = assemblydata(Y)
+k = 0
 for i = 1:4
-for (m,a) in ad[1,i] println(m," ", a) end
-print("\n")
+    l = 0
+for (m,a) in ad[1,i] #println(m," ", a)
+    global k += 1
+    if i != 1
+        l += 1
+    end
 end
+if i != 1
+    @assert l == 2
+end
+#print("\n")
+end
+@assert k == 6
+
+X = BEAST.nedelecc3d(Γ)
+Y = curl(X)
+E, ad = assemblydata(Y)
+k = 0
+for i = 1:4
+    l = 0
+for (m,a) in ad[1,i] #println(m," ", a)
+    global k += 1
+    l += 1
+end
+@assert l == 3
+#print("\n")
+end
+
+@assert k == 12
+
+print("test succesvol")

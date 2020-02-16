@@ -7,7 +7,7 @@ X = raviartthomas(Γ)
 
 #define test functions
 
-μo, μi, ϵo, ϵi, ω = 1, 0.1, 1, 100, 1
+μo, μi, ϵo, ϵi, ω = 1, 1, 1, 1, 1
 
 κ, κin = ω*sqrt(ϵo*μo), ω*sqrt(ϵi*μi)
 η = sqrt(μi/ϵi)
@@ -45,7 +45,15 @@ s = solve(pmchwt)
 
 u = s[1:1236,1]
 #u = s[1237:2472,1]
-plotresults = true
-include(joinpath(d,"../examples/utils/postproc.jl"))
-include(joinpath(d,"../examples/utils/plotresults.jl"))
+using Plots
+print("hier")
+import PlotlyJS
+fcrj, geo = facecurrents(u,X)
+print(extrema(norm.(fcrj)))
+PlotlyJS.plot(patch(geo, BEAST.norm.(fcrj)))
+
+#u = s[1237:2472,1]
+#plotresults = true
+#include(joinpath(d,"../examples/utils/postproc.jl"))
+#include(joinpath(d,"../examples/utils/plotresults.jl"))
 #plot

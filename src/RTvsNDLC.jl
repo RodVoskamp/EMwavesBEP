@@ -5,6 +5,7 @@ using CompScienceMeshes
 useedg, deledg, delfac = CompScienceMeshes.stripboundedge(Γ)
 
 ΓRT = delfac
+#ΓRT = CompScienceMeshes.meshsphere(1,0.3)
 XRT = raviartthomas(ΓRT)
 κ = 1.0
 t = Maxwell3D.singlelayer(wavenumber=κ)
